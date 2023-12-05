@@ -1,6 +1,6 @@
 # Translator
 
-The Translator Application is a simple desktop tool built using Python and PySimpleGUI that allows users to translate 
+Translator is a simple application built using Python and PySimpleGUI that allows users to translate 
 text from one language (which is auto-detected) to another. The application leverages the translate library. There is
 a button present that allows you to copy output translations to the clipboard quickly.
 
