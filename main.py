@@ -1,7 +1,6 @@
 # Imports
 import PySimpleGUI as sg
 from translate import Translator
-import pyperclip
 import subprocess
 
 # Functions
