@@ -13,12 +13,28 @@ def copy_to_clipboard(txt):
     cmd='echo '+txt.strip()+'|clip'
     return subprocess.check_call(cmd, shell=True)
 
+def clear_output_element(window):
+    window['-OUT-'].update("")
+
+def show_error_message(message):
+    sg.popup_error(message)
+
 # GUI
 sg.theme("Reddit")
 
 def main():
-    # List of languages
-    language_options = ['English', 'Spanish', 'French', 'German', 'Italian', 'Chinese', 'Japanese', 'Korean', 'Russian', 'Arabic']
+    
+    # Languages
+    language_options = [
+    'English', 'Spanish', 'French', 'German', 'Italian',
+    'Chinese', 'Japanese', 'Korean', 'Russian', 'Arabic',
+    'Portuguese', 'Dutch', 'Turkish', 'Swedish', 'Polish',
+    'Danish', 'Finnish', 'Norwegian', 'Greek', 'Hungarian',
+    'Czech', 'Romanian', 'Bulgarian', 'Hebrew', 'Hindi',
+    'Thai', 'Indonesian', 'Vietnamese', 'Malay', 'Tagalog',
+    'Bengali', 'Punjabi', 'Gujarati', 'Tamil', 'Urdu',
+    'Swahili', 'Yoruba', 'Zulu', 'Mongolian', 'Slovak'
+]
 
     layout = [  
         [sg.Text("Translate to:")],
@@ -31,24 +47,32 @@ def main():
     window = sg.Window('Translator', layout)
 
     while True:
-        event, values = window.Read()
+        event, values = window.read()
 
-        if event == sg.WIN_CLOSED:
+        if event == sg.WINDOW_CLOSED:
             break
         elif event == '-SUBMIT-':
             target_lang = values["-LANG-"]
             input_text = values["-IN-"]
 
-            # Clear the output element
-            window['-OUT-'].update("")
+            clear_output_element(window)
 
             if target_lang and input_text:
-                translated_text = translate_text(input_text, target_lang)
-                print(f"{translated_text}")
+                try:
+                    translated_text = translate_text(input_text, target_lang)
+                    print(f"{translated_text}")
+                except Exception as e:
+                    show_error_message(f"Translation error: {e}")
         elif event == '-COPY-':
-            # Use sg.OutputTextElement to get the value
             output_text = window['-OUT-'].get()
-            copy_to_clipboard(output_text)
+            try:
+                copy_to_clipboard(output_text)
+                sg.popup("Output copied to clipboard.", title="Success")
+            except Exception as e:
+                show_error_message(f"Clipboard copy error: {e}")
+
+    window.close()
+
 
     window.Close()
 
